@@ -26,8 +26,8 @@ public class UserController {
     public ResponseEntity<String> login(@RequestBody LoginRequestDTO request){
         UsernamePasswordAuthenticationToken token=new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword());
         authenticationManager.authenticate(token);
-
-        return new ResponseEntity<>("Success", HttpStatus.OK);
+        String jwtToken= jwtUtil.generateToken(request.getUsername());
+        return new ResponseEntity<>(jwtToken, HttpStatus.OK);
 
     }
 }
