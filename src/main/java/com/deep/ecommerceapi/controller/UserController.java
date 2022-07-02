@@ -1,6 +1,8 @@
 package com.deep.ecommerceapi.controller;
 
 import com.deep.ecommerceapi.dto.LoginRequestDTO;
+import com.deep.ecommerceapi.entity.User;
+import com.deep.ecommerceapi.service.UserService;
 import com.deep.ecommerceapi.utils.JWTUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,8 @@ public class UserController {
     private JWTUtil jwtUtil;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDTO request){
@@ -30,5 +34,25 @@ public class UserController {
         return new ResponseEntity<>(jwtToken, HttpStatus.OK);
 
     }
+
+    @PostMapping("user/save")
+    public ResponseEntity<String> saveUser(@RequestBody User user){
+        Long id=userService.saveUser(user);
+        return new ResponseEntity<>("User with the "+id+" created",HttpStatus.CREATED);
+    }
 }
 
+
+//{
+//        "name":"Deep Roy",
+//        "username":"deep6104",
+//        "password":"1234",
+//        "roles":["ADMIN","EMP"]
+//}
+
+//{
+//        "name":"Anshu Kailash",
+//        "username":"anshu",
+//        "password":"1234",
+//        "roles":["ADMIN","EMP"]
+//        }

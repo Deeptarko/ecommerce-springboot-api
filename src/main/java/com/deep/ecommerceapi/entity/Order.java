@@ -29,7 +29,7 @@ public class Order {
     private String orderStatus;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="fk_customer")
-    private Customer customer;
+    @JoinColumn(name="fk_user")
+    private User user;
 
 }

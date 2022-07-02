@@ -28,7 +28,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //Read token from the authorization header
         String token=request.getHeader("Authorization");
-
+        logger.info(token);
         if(token!=null){
             String username=jwtUtil.getUsername(token);
 

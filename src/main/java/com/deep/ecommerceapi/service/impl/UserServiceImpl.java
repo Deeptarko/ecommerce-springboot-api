@@ -1,34 +1,55 @@
 package com.deep.ecommerceapi.service.impl;
 
+import com.deep.ecommerceapi.entity.User;
+import com.deep.ecommerceapi.repository.UserRepository;
 import com.deep.ecommerceapi.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.swing.text.html.Option;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
+
+
+    public Long saveUser(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        log.info("Saving user");
+        return userRepository.save(user).getId();
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // This is where you should fetch the user from database.
-        // We keep it simple to focus on authentication flow.
-        Map<String, String> users = new HashMap<>();
-        users.put("martin", passwordEncoder.encode("123"));
-        if (users.containsKey(username))
-            return new User(username, users.get(username), new ArrayList<>());
-        // if this is thrown, then we won't generate JWT token.
-        throw new UsernameNotFoundException(username);
+        Optional<User>user=findByUsername(username);
+        if(user.isPresent()){
+            User newUser=user.get();
+            return new org.springframework.security.core.userdetails.User(
+                    newUser.getUsername(),
+                    newUser.getPassword(),
+                    newUser.getRoles().stream().map((role)->new SimpleGrantedAuthority(role)).collect(Collectors.toList())
+            );
+
+        }
+        throw new UsernameNotFoundException("User not found");
+    }
+
+    @Override
+    public Optional<com.deep.ecommerceapi.entity.User> findByUsername(String username) {
+        log.info("Getting user with the username "+username);
+        return userRepository.findByUsername(username);
     }
 }
