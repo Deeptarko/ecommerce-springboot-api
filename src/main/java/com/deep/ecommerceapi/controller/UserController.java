@@ -1,22 +1,32 @@
 package com.deep.ecommerceapi.controller;
 
 import com.deep.ecommerceapi.dto.LoginRequestDTO;
+import com.deep.ecommerceapi.dto.LoginResponseDTO;
 import com.deep.ecommerceapi.entity.User;
 import com.deep.ecommerceapi.service.UserService;
 import com.deep.ecommerceapi.utils.JWTUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.List;
+
+@CrossOrigin
 @RestController
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -27,11 +37,14 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDTO request){
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request){
         UsernamePasswordAuthenticationToken token=new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword());
-        authenticationManager.authenticate(token);
+        log.info(request.getUsername()+":"+request.getPassword());
+        Authentication auth=authenticationManager.authenticate(token);
         String jwtToken= jwtUtil.generateToken(request.getUsername());
-        return new ResponseEntity<>(jwtToken, HttpStatus.OK);
+        List<GrantedAuthority>roles=(List)auth.getAuthorities();
+        LoginResponseDTO response=new LoginResponseDTO(jwtToken,roles);
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
@@ -39,6 +52,11 @@ public class UserController {
     public ResponseEntity<String> saveUser(@RequestBody User user){
         Long id=userService.saveUser(user);
         return new ResponseEntity<>("User with the "+id+" created",HttpStatus.CREATED);
+    }
+
+    @GetMapping("/hello")
+    public ResponseEntity<String> test(Authentication authentication){
+        return new ResponseEntity<>("Hello",HttpStatus.OK);
     }
 }
 
