@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -43,7 +44,8 @@ public class UserController {
         Authentication auth=authenticationManager.authenticate(token);
         String jwtToken= jwtUtil.generateToken(request.getUsername());
         List<GrantedAuthority>roles=(List)auth.getAuthorities();
-        LoginResponseDTO response=new LoginResponseDTO(jwtToken,roles);
+        List<String>rolesResponse=roles.stream().map((authority)->authority.getAuthority()).collect(Collectors.toList());
+        LoginResponseDTO response=new LoginResponseDTO(jwtToken,rolesResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }

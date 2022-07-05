@@ -25,7 +25,8 @@ public class Product {
     private String descriptions;
     @CreationTimestamp
     private Date create_date;
-
+    @Column(name="total_quantity")
+    private Integer totalQuantity;
     @ManyToOne(cascade = CascadeType.ALL)
     private ProductCategories productCategories;
 

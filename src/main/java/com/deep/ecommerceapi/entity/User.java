@@ -33,7 +33,7 @@ public class User {
     private Set<String>roles;
 
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.LAZY)
     private List<Order> orderList;
 
     public void addOrder(Order order){

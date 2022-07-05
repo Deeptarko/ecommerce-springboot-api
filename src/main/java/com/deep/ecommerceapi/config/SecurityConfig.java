@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // disabling csrf since we won't use form login
                 .csrf().disable()
                 // giving every permission to every request for /login endpoint
-                .authorizeRequests().antMatchers("/login","/user/save").permitAll()
+                .authorizeRequests().antMatchers("/login","/user/save","/api/order/orders","/api/order/product/{productId}").permitAll()
                 // for everything else, the user has to be authenticated
                 .anyRequest().authenticated()
                 // setting stateless session, because we choose to implement Rest API

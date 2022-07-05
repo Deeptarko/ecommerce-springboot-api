@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -24,12 +25,19 @@ public class Order {
     @Column(name="shipping_address")
     private String shippingAddress;
     @Column(name="order_date")
+    @CreationTimestamp
     private Date orderDate;
     @Column(name="order_status")
     private String orderStatus;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    private Integer quantity;
+
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name="fk_user")
     private User user;
+
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name="fk_product")
+    private Product product;
 
 }
