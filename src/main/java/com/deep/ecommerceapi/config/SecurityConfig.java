@@ -43,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+
                 // disabling csrf since we won't use form login
                 .csrf().disable()
                 // giving every permission to every request for /login endpoint

@@ -1,5 +1,6 @@
 package com.deep.ecommerceapi.controller;
 
+import com.deep.ecommerceapi.dto.ProductResponseDTO;
 import com.deep.ecommerceapi.entity.Product;
 import com.deep.ecommerceapi.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,10 @@ import com.deep.ecommerceapi.utils.AppConstants;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/product")
+@CrossOrigin
 public class ProductController {
 
     @Autowired
@@ -25,12 +28,13 @@ public class ProductController {
     }
 
     //Get All Products
+//    @CrossOrigin
     @GetMapping("/products")
-    public ResponseEntity<List<Product>>getAllProducts(
+    public ResponseEntity<List<ProductResponseDTO>>getAllProducts(
             @RequestParam(value="sortBy",defaultValue = AppConstants.DEFAULT_SORT_BY,required = false) String sortBy,
             @RequestParam(value="sortDir",defaultValue = AppConstants.DEFAULT_SORT_DIRECTION,required = false) String sortDir
     ){
-        List<Product>productList=productService.getAllProducts(sortBy,sortDir);
+        List<ProductResponseDTO>productList=productService.getAllProducts(sortBy,sortDir);
         return new ResponseEntity<>(productList,HttpStatus.OK);
     }
 
@@ -43,8 +47,8 @@ public class ProductController {
 
     //Get Product By Category
     @GetMapping("/category/{productCategory}")
-    public ResponseEntity<List<Product>> getProductByProductCategory(@PathVariable String productCategory){
-        List<Product> productList=productService.findByProductCategory(productCategory);
+    public ResponseEntity<List<ProductResponseDTO>> getProductByProductCategory(@PathVariable String productCategory){
+        List<ProductResponseDTO> productList=productService.findByProductCategory(productCategory);
         return new ResponseEntity<>(productList,HttpStatus.OK);
     }
 
