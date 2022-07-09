@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    public String saveOrder(OrderRequestDTO orderRequest);
+    public OrderResponseDTO saveOrder(OrderRequestDTO orderRequest);
     public List<OrderResponseDTO> getAllOrders();
 
     public List<OrderResponseDTO> getOrdersByUserId(Long userId);

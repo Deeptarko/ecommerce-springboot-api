@@ -42,19 +42,19 @@ public class JWTUtil {
 
     //Read Claims
     public Claims getClaims(String token){
-        return Jwts.parser()
+       return Jwts.parser()
                 .setSigningKey(secret.getBytes())
                 .parseClaimsJws(token)
                 .getBody();
     }
 
     //Generate Token
-    public String generateToken(String subject){
+    public String generateToken(String  subject){
         return Jwts.builder()
                 .setSubject(subject)
                 .setIssuer("Deep")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+ TimeUnit.MINUTES.toMillis(15)))
+                .setExpiration(new Date(System.currentTimeMillis()+ TimeUnit.MINUTES.toMillis(25)))
                 .signWith(SignatureAlgorithm.HS512,secret.getBytes())
                 .compact();
     }

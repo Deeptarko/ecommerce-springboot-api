@@ -21,9 +21,9 @@ public class OrderController {
 
     //Save Order
     @PostMapping("/save")
-    public ResponseEntity<String>saveOrder(@RequestBody OrderRequestDTO orderRequest){
-        String msg=orderService.saveOrder(orderRequest);
-        return new ResponseEntity<>(msg,HttpStatus.CREATED);
+    public ResponseEntity<OrderResponseDTO>saveOrder(@RequestBody OrderRequestDTO orderRequest){
+       OrderResponseDTO orderResponse=orderService.saveOrder(orderRequest);
+        return new ResponseEntity<>(orderResponse,HttpStatus.CREATED);
     }
 
 

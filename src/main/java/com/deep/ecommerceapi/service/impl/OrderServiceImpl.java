@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService {
     private ProductRepository productRepository;
 
     @Override
-    public String saveOrder(OrderRequestDTO orderRequest) {
+    public OrderResponseDTO saveOrder(OrderRequestDTO orderRequest) {
         log.info("Saving Order");
         log.info("Fetching user with the username {}",orderRequest.getUsername());
         Optional<User> user=userRepository.findByUsername(orderRequest.getUsername());
@@ -47,8 +47,9 @@ public class OrderServiceImpl implements OrderService {
                     .shippingAddress(orderRequest.getShippingAddress())
                     .orderStatus(orderRequest.getOrderStatus())
                     .build();
-            orderRepository.save(order);
-            return "Order Saved";
+            Order savedOrder=orderRepository.save(order);
+            OrderResponseDTO orderResponse=mapToDTO(savedOrder);
+            return orderResponse;
         }
 
        throw new OrderException(HttpStatus.BAD_REQUEST,"Either user or product not present");
