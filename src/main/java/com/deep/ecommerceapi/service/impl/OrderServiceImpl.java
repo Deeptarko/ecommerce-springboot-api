@@ -96,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
         if(order.isPresent()){
             if(order.get().getOrderStatus().equals("PLACED")){
                 orderRepository.updateStatusForOrder("DISPATCHED",orderId);
-            }else if{
+            }else {
                 orderRepository.updateStatusForOrder("DELIVERED",orderId);
             }
             return "Order with the id "+orderId+" successfully updated";
