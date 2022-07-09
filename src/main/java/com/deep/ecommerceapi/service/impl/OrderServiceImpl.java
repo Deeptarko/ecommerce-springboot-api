@@ -81,6 +81,13 @@ public class OrderServiceImpl implements OrderService {
         return newOrderList;
     }
 
+    @Override
+    public String deleteOrderByOrderId(Long orderId) {
+        log.info("Deleting order with the id {}",orderId);
+        orderRepository.deleteById(orderId);
+        return "Order deleted successfully";
+    }
+
 
     //Utility Method-Entity To DTO
     public OrderResponseDTO mapToDTO(Order order){

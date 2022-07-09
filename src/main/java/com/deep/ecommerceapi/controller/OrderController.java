@@ -3,6 +3,7 @@ package com.deep.ecommerceapi.controller;
 import com.deep.ecommerceapi.dto.OrderRequestDTO;
 import com.deep.ecommerceapi.dto.OrderResponseDTO;
 import com.deep.ecommerceapi.entity.Order;
+import com.deep.ecommerceapi.payload.DeleteResponse;
 import com.deep.ecommerceapi.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,15 @@ public class OrderController {
     public ResponseEntity<List<OrderResponseDTO>> getOrderByProductId(@PathVariable Long productId){
         List<OrderResponseDTO> orderList=orderService.getOrderByProductId(productId);
         return new ResponseEntity<>(orderList, HttpStatus.OK);
+
+    }
+
+    //Delete Order By OrderId
+    @DeleteMapping("/delete/{orderId}")
+    public ResponseEntity<DeleteResponse>deleteOrderByOrderId(@PathVariable Long orderId){
+        String msg= orderService.deleteOrderByOrderId(orderId);
+        DeleteResponse response=new DeleteResponse(msg);
+        return new ResponseEntity<>(response,HttpStatus.OK);
 
     }
 

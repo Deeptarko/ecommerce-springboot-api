@@ -13,5 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class LoginResponseDTO {
     private String token;
+    private String username;
     private List<String> roles;
 }

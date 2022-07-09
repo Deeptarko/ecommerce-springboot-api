@@ -5,8 +5,7 @@ import com.deep.ecommerceapi.dto.LoginResponseDTO;
 import com.deep.ecommerceapi.entity.User;
 import com.deep.ecommerceapi.service.UserService;
 import com.deep.ecommerceapi.utils.JWTUtil;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,13 +14,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +39,7 @@ public class UserController {
         String jwtToken= jwtUtil.generateToken(request.getUsername());
         List<GrantedAuthority>roles=(List)auth.getAuthorities();
         List<String>rolesResponse=roles.stream().map((authority)->authority.getAuthority()).collect(Collectors.toList());
-        LoginResponseDTO response=new LoginResponseDTO(jwtToken,rolesResponse);
+        LoginResponseDTO response=new LoginResponseDTO(jwtToken,auth.getName(),rolesResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }

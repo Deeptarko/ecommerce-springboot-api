@@ -14,4 +14,6 @@ public interface OrderService {
     public List<OrderResponseDTO> getOrdersByUserId(Long userId);
 
     public List<OrderResponseDTO> getOrderByProductId(Long productId);
+
+    public String deleteOrderByOrderId(Long orderId);
 }
