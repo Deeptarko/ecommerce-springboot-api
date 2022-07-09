@@ -15,11 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Transactional
 @Service
 @Slf4j
 public class OrderServiceImpl implements OrderService {
@@ -86,6 +88,21 @@ public class OrderServiceImpl implements OrderService {
         log.info("Deleting order with the id {}",orderId);
         orderRepository.deleteById(orderId);
         return "Order deleted successfully";
+    }
+
+    @Override
+    public String updateOrderByOrderId(Long orderId) {
+        Optional<Order> order=orderRepository.findById(orderId);
+        if(order.isPresent()){
+            if(order.get().getOrderStatus().equals("PLACED")){
+                orderRepository.updateStatusForOrder("DISPATCHED",orderId);
+            }else if{
+                orderRepository.updateStatusForOrder("DELIVERED",orderId);
+            }
+            return "Order with the id "+orderId+" successfully updated";
+        }
+        throw new OrderException(HttpStatus.BAD_REQUEST,"Order not found with the given id");
+
     }
 
 

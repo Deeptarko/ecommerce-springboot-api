@@ -62,4 +62,14 @@ public class OrderController {
 
     }
 
+    //Delete Order By OrderId
+    @PutMapping("/update/{orderId}")
+    public ResponseEntity<DeleteResponse>updateOrderByOrderId(@PathVariable Long orderId){
+        String msg= orderService.updateOrderByOrderId(orderId);
+        //TODO:Create a generic response class
+        DeleteResponse response=new DeleteResponse(msg);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+
+    }
+
 }
